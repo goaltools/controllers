@@ -4,15 +4,8 @@
 package datroute
 
 import (
-	"flag"
 	"log"
 	"net/http"
-)
-
-var (
-	// maxMem is a number of MB per upload that is stored in memory.
-	// The remainder is stored on disk in temporary files.
-	maxMem = flag.Int64("requests:max.memory", 32, "number of MB to store in memory when parsing a file")
 )
 
 // DATRoute is a controller that does two things:
@@ -36,8 +29,6 @@ func (c *DATRoute) Before() http.Handler {
 	// Parse the body depending on the Content-Type.
 	var err error
 	switch c.Request.Header.Get("Content-Type") {
-	case "multipart/form-data":
-		err = c.Request.ParseMultipartForm(*maxMem << 20)
 	default:
 		err = c.Request.ParseForm()
 	}
@@ -46,7 +37,7 @@ func (c *DATRoute) Before() http.Handler {
 	// Otherwise, return a "bad request" error.
 	if err != nil {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			log.Println(err)
+			go log.Println(err)
 			http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 		})
 	}
