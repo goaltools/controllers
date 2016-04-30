@@ -1,4 +1,4 @@
-# Controllers
+# Goal Controllers
 Officially supported controllers for the Goal based applications.
 
 [![GoDoc](https://godoc.org/github.com/goaltools/controllers?status.svg)](https://godoc.org/github.com/goaltools/controllers)
